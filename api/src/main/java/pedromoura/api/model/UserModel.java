@@ -13,7 +13,7 @@ public class UserModel {
     @Column (nullable = false)
     private String name;
 
-    @Column (nullable = false)
+    @Column (nullable = false, unique = true)
     private String login;
 
     @Column (nullable = false)

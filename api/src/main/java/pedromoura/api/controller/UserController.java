@@ -1,5 +1,6 @@
 package pedromoura.api.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import pedromoura.api.model.UserModel;
 import pedromoura.api.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -48,5 +50,17 @@ public class UserController {
         if (repository.existsById(id)){
             repository.deleteById(id);
         }
+    }
+
+    @GetMapping(path = "/user/validate")
+    public ResponseEntity<Boolean> ValidatePassword (@RequestParam String login, @RequestParam String password){
+
+        Optional<UserModel> optUser = repository.findByLogin(login);
+        if (optUser.isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+        }
+        boolean valid = encoder.matches(password, optUser.get().getPassword());
+        HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status).body(valid);
     }
 }
