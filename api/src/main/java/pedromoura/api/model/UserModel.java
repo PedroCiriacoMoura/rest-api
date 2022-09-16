@@ -1,5 +1,7 @@
 package pedromoura.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -16,6 +18,7 @@ public class UserModel {
     @Column (nullable = false, unique = true)
     private String login;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column (nullable = false)
     private String password;
 
